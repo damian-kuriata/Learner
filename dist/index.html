@@ -1,0 +1,46 @@
+<!doctype html>
+<html>
+  <head>
+    <title>
+      Learner | learn new phrases easily
+    </title>
+    <link rel="stylesheet" href="../learner.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+  <body>
+    <main>
+      <nav>
+        <!-- Buttons that switch between "learn" and "manage" panes on
+          mobile phones. For desktop there is only one big pane so
+          buttons are not visible -->
+        <button id="learnBtn" class="navButton activeNavBtn">Learn</button>
+        <button id="manageBtn" class="navButton">Manage</button>
+      </nav>
+      <section id="learnPane">
+          <p>Translate</p>
+          <div id="translatedPhrase">
+
+          </div>
+          <label for="learnPhraseInput"  class="displayBlock textCenter">Enter your translation:</label>
+          <input type="text" id="learnPhraseInput" name="learnPhrase" size="30">
+
+            <button id="checkBtn">Check</button>
+            <p id="resultText">
+              <!-- Content will by dynamically generated -->
+            </p>
+            <!-- Button shown only when phrase is incorrect -->
+            <button id="nextButton" class="inactive">Next</button>
+      </section>
+
+      <section id="managePane" class="inactivePane">
+          <ul id="phrasesList"></ul>
+          <button type="button">New</button>
+      </section>
+
+    </main>
+    <footer>
+      Application created by Damian Kuriata
+    </footer>
+    <script src="main.js"></script>
+  </body>
+</html>

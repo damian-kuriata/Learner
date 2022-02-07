@@ -1,0 +1,15 @@
+{
+  "name": "language_phrase",
+  "version": "1.0.1",
+  "description": "Very simple module that operates on language phrases.",
+  "main": "phrase.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "github.com/damian-kuriata/Phrase"
+  },
+  "author": "Damian Kuriata",
+  "license": "ISC"
+}

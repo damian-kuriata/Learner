@@ -1,0 +1,161 @@
+@import {
+  url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+}
+
+* {
+  line-height: 1.6;
+  color: white;
+}
+html {
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+}
+
+body {
+  width: 100%;
+  margin: 0 0 0;
+  color: white;
+  background-color: black;
+  height: 98vh;
+  position: relative;
+}
+
+nav {
+  display: flex;
+  background-color: rgba(146, 109, 255, 0.8);
+  margin: 0.1em 0 0 0;
+}
+
+main {
+  height: 100%;
+}
+
+footer {
+  position: absolute;
+  bottom: 0;
+  text-align: center;
+  width: 95vw;
+  font-size: 0.5rem;
+  font-weight: lighter;
+}
+button {
+  background-color: rgba(54, 0, 207, 1);
+  color: white;
+  font-weight: bold;
+  padding: 0.3em;
+  border-radius: 3px;
+  outline: none;
+  border: none;
+}
+
+button:hover {
+  background-color: rgba(54, 0, 207, 0.5);
+}
+
+section {
+  margin: 0 0.5rem 0;
+}
+
+input {
+  caret-color: white;
+  color: white;
+}
+
+input[type="text"] {
+  border: none;
+  border-bottom: 3px white solid;
+  background-color: rgba(255, 255, 255, 0); /* Fully opaque */
+  font: inherit;
+}
+
+input[type="text"]:focus {
+  outline: 3px solid grey;
+}
+
+#learnBtn {
+
+}
+
+#manageBtn {
+
+}
+
+#learnPhraseInput {
+  margin-left: 1em;
+}
+
+
+section#learnPane {
+  width: 98%;
+  height: 90%;
+}
+
+section#learnPane > p:first-child {
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+section#managePane {
+  width: 98%;
+  height: 90%;
+}
+
+section#learnPane > div#translatedPhrase {
+  margin-left: auto;
+  margin-right: auto;
+  font-size: 1.4rem;
+  color: red;
+  width: 85%;
+  height: 7rem;
+  overflow-y: auto;
+  margin-bottom: 2rem;
+}
+
+section#learnPane > #checkBtn {
+  font-size: 1.5rem;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+section#learnPane > #nextButton {
+  font-size: 1.5rem;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+.navButton {
+  font-size: 1.3rem;
+  display: inline;
+  width: 50%;
+}
+
+/* Used only on smartphones. Indicates which pane is currently active. */
+.activeNavBtn {
+  color: grey;
+}
+/* Used only on smartphones. Indicates which pane is currently inactive. */
+.inactivePane {
+  display: none;
+}
+
+.displayBlock {
+  display: block;
+}
+
+.displayAbsolute {
+  display: absolute;
+}
+
+.textCenter {
+  text-align: center;
+}
+
+.nodisplay {
+  display: none;
+}
