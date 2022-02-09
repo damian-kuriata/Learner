@@ -42,7 +42,6 @@ class PhraseList {
         // Likely this method will be assigned outside of an object.
         if (this.onPhraseDelete) {
           const id = deleteButton.getAttribute("id").slice(6); // deleteid
-          console.log("Trying to delete: ", id);
           this.onPhraseDelete(id);
         }
       });
@@ -69,12 +68,14 @@ export default class ManagePaneHandler {
     this.onConfirm = this.onConfirm.bind(this);
     this.onClose = this.onClose.bind(this);
 
-    this.newPhraseDialog = new PhraseInputDialog();
-    this.newPhraseDialog.hide();
-    this.newPhraseDialog.onOriginalTextInputChange(this.onNewOriginalTextChange);
-    this.newPhraseDialog.onTranslatedTextInputChange(this.onNewTranslatedTextChange);
-    this.newPhraseDialog.onClose(this.onClose);
-    this.newPhraseDialog.onConfirm(this.onConfirm);
+    // Because only one dialog can be visible at a time, we can use just
+    // One to both create new phrases or edit old ones.
+    this.phraseInputDialog = new PhraseInputDialog();
+    this.phraseInputDialog.hide();
+    this.phraseInputDialog.onOriginalTextInputChange(this.onNewOriginalTextChange);
+    this.phraseInputDialog.onTranslatedTextInputChange(this.onNewTranslatedTextChange);
+    this.phraseInputDialog.onClose(this.onClose);
+    this.phraseInputDialog.onConfirm(this.onConfirm);
 
     this.phraseList = new PhraseList(document.querySelector("#phrasesList"));
     this.phraseList.onPhraseDelete = (id) => {
@@ -84,7 +85,10 @@ export default class ManagePaneHandler {
 
     this.newButton = document.querySelector("#managePane > button");
     this.newButton.addEventListener("click", () => {
-      this.newPhraseDialog.show();
+      this.phraseInputDialog.show();
+      // Once the dialog is shown, button must be disabled to prevent
+      // Multiple opened dialogs.
+      this.newButton.disabled = true;
     });
   }
 
@@ -101,13 +105,17 @@ export default class ManagePaneHandler {
     const newPhrase = new Phrase(this.newOriginalText, this.newTranslatedTex);
     Phrase.saveToStorage(newPhrase);
     this.phraseList.refresh(Phrase.loadFromStorage());
-    this.newOrignalText = "",
-    this.newTranslatedText = "";
+    this.#onInputComplete();
   }
 
   onClose () {
+    this.#onInputComplete();
+  }
+
+  #onInputComplete () {
     this.newOriginalText = "";
     this.newTranslatedText = "";
+    this.newButton.disabled = false;
   }
 
   show () {
