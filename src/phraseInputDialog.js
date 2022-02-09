@@ -12,22 +12,19 @@ export default class PhraseInputDialog {
   }
 
   onOriginalTextInputChange (callback) {
-    const current = this.originalTextInput.value;
-    this.originalTextInput.addEventListener("input", () => callback(current));
+    this.originalTextInput.addEventListener("input", () => callback(this.originalTextInput.value));
   }
 
   onTranslatedTextInputChange (callback) {
-    const current = this.translatedTextInput.value;
-    this.translatedTextInput.addEventListener("input", () => callback(current));
+    this.translatedTextInput.addEventListener("input", () => callback( this.translatedTextInput.value));
   }
 
   onClose (callback, autoClose=true, autoClear=true) {
     // TODO: Errors here.
-    console.log("Close called");
     if (callback) {
-      console.log("has callback");
       this.closeButton.addEventListener("click", () => {
-        console.log("auto close:", autoClose);
+        //const [callback, autoClose, autoClear] = parentParams;
+        console.log("auto close:", autoClose, autoClear);
         if (autoClose) {
           this.hide();
           console.log("this hide");

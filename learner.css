@@ -149,7 +149,8 @@ section#learnPane > #nextButton {
 }
 
 .displayAbsolute {
-  display: absolute;
+  display: block;
+  position: absolute;
 }
 
 .textCenter {
