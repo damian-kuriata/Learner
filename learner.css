@@ -5,7 +5,9 @@
 * {
   line-height: 1.6;
   color: white;
+  box-sizing: border-box;
 }
+
 html {
   font-family: 'Roboto', sans-serif;
   font-size: 16px;
@@ -21,7 +23,6 @@ body {
 }
 
 nav {
-  display: flex;
   background-color: rgba(146, 109, 255, 0.8);
   margin: 0.1em 0 0 0;
 }
@@ -34,26 +35,45 @@ footer {
   position: absolute;
   bottom: 0;
   text-align: center;
-  width: 95vw;
+  width: 100vw;
   font-size: 0.5rem;
   font-weight: lighter;
 }
+
+a {
+  text-decoration: none;
+}
+
+a:focus {
+  outline: 3px solid grey;
+}
+
+a:hover {
+  color: #3a3940;
+}
+
+a:active {
+  outline: 3px solid grey;
+}
+
+/* Standard size button */
 button {
   background-color: rgba(54, 0, 207, 1);
   color: white;
-  font-weight: bold;
-  padding: 0.3em;
-  border-radius: 3px;
+  font-size: 0.85em;
+  font-weight: 500;
+  padding: 0.3em 0.5em;
+  border-radius: 6px;
   outline: none;
   border: none;
 }
 
-button:hover {
-  background-color: rgba(54, 0, 207, 0.5);
+button:focus {
+  outline: 3px solid #3a3940;
 }
 
-section {
-  margin: 0 0.5rem 0;
+button:active {
+  background-color: rgba(54, 0, 207, 0.5);
 }
 
 input {
@@ -70,6 +90,72 @@ input[type="text"] {
 
 input[type="text"]:focus {
   outline: 3px solid grey;
+}
+
+label {
+  font-size: 0.8em;
+  font-weight: lighter;
+}
+
+label::first-letter {
+  text-transform: capitalize; /* Always capitalized first letter */
+}
+
+nav > .nav-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+section > .learn-pane {
+
+}
+
+.nav-btn {
+  font-size: 1.3em;
+  font-weight: 500;
+  width: 25%;
+}
+
+.nav-btn:focus {
+  color: grey;
+  outline: none;
+}
+
+.btn-medium {
+  font-size: 1em;
+}
+
+.btn-big {
+  font-size: 1.2em;
+}
+
+/* -- UTILITIES -- */
+.position-absolute {
+  position: absolute;
+}
+
+.position-relative {
+  position: relative;
+}
+
+.hidden {
+  display: none;
+}
+
+.display-block {
+  display: block;
+}
+
+.display-flex {
+  display: flex;
+}
+
+.display-inline-block {
+  display: inline-block;
+}
+
+.display-inline {
+  display: inline;
 }
 
 #learnBtn {

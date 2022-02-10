@@ -13,15 +13,18 @@
         <!-- Buttons that switch between "learn" and "manage" panes on
           mobile phones. For desktop there is only one big pane so
           buttons are not visible -->
-        <button id="learnBtn" class="navButton activeNavBtn">Learn</button>
-        <button id="manageBtn" class="navButton">Manage</button>
+        <div class="nav-buttons">
+          <button class="nav-btn">Learn</button>
+          <button class="nav-btn">Manage</button>
+        </div>
       </nav>
-      <section id="learnPane">
+      <section>
+        <div class="learn-pane">
           <p>Translate</p>
-          <div id="translatedPhrase">
-
+          <div id="translated-phrase">
+            <!-- Content will be generated in JavaScript -->
           </div>
-          <label for="learnPhraseInput"  class="displayBlock textCenter">Enter your translation:</label>
+          <label for="learn-phrase-input" class="displayBlock text-center">Enter your translation:</label>
           <input type="text" id="learnPhraseInput" name="learnPhrase" size="30">
 
             <button id="checkBtn">Check</button>
@@ -30,6 +33,7 @@
             </p>
             <!-- Button shown only when phrase is incorrect -->
             <button id="nextButton" class="inactive">Next</button>
+          </div>
       </section>
 
       <section id="managePane" class="inactivePane">
