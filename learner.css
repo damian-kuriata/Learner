@@ -14,7 +14,6 @@ html {
 }
 
 body {
-  width: 100%;
   margin: 0 0 0;
   color: white;
   background-color: black;
@@ -93,7 +92,7 @@ input[type="text"]:focus {
 }
 
 label {
-  font-size: 0.8em;
+  font-size: 1.1em;
   font-weight: lighter;
 }
 
@@ -107,7 +106,44 @@ nav > .nav-buttons {
 }
 
 section > .learn-pane {
+  width: 80%;
+  margin: auto;
+}
 
+section #translated-phrase {
+  margin: 0 auto 1em;
+  font-size: 1.2em;
+  color: #9d4dff;
+  text-align: center;
+  height: 4em;
+  overflow: auto;
+}
+
+section > .learn-pane .input-vertical-container {
+  margin: 0.5em 0 1.2em;
+}
+
+section > .learn-pane .input-vertical-container > label {
+  margin-bottom: 0.5em;
+}
+
+#translate-header {
+  text-align: center;
+  margin: 2em auto;
+}
+
+#check-btn {
+  margin: auto;
+}
+
+#next-btn {
+  margin: auto;
+}
+
+#result-text {
+  margin: 2em auto;
+  height: 3em;
+  overflow: auto;
 }
 
 .nav-btn {
@@ -121,128 +157,8 @@ section > .learn-pane {
   outline: none;
 }
 
-.btn-medium {
-  font-size: 1em;
-}
-
-.btn-big {
-  font-size: 1.2em;
-}
-
-/* -- UTILITIES -- */
-.position-absolute {
-  position: absolute;
-}
-
-.position-relative {
-  position: relative;
-}
-
-.hidden {
-  display: none;
-}
-
-.display-block {
-  display: block;
-}
-
-.display-flex {
+.input-vertical-container {
   display: flex;
-}
-
-.display-inline-block {
-  display: inline-block;
-}
-
-.display-inline {
-  display: inline;
-}
-
-#learnBtn {
-
-}
-
-#manageBtn {
-
-}
-
-#learnPhraseInput {
-  margin-left: 1em;
-}
-
-
-section#learnPane {
-  width: 98%;
-  height: 90%;
-}
-
-section#learnPane > p:first-child {
-  font-size: 1.5rem;
-  text-align: center;
-}
-
-section#managePane {
-  width: 98%;
-  height: 90%;
-}
-
-section#learnPane > div#translatedPhrase {
-  margin-left: auto;
-  margin-right: auto;
-  font-size: 1.4rem;
-  color: red;
-  width: 85%;
-  height: 7rem;
-  overflow-y: auto;
-  margin-bottom: 2rem;
-}
-
-section#learnPane > #checkBtn {
-  font-size: 1.5rem;
-  margin-left: auto;
-  margin-right: auto;
-  display: block;
-  margin-top: 2rem;
-  margin-bottom: 2rem;
-}
-
-section#learnPane > #nextButton {
-  font-size: 1.5rem;
-  margin-left: auto;
-  margin-right: auto;
-  display: block;
-  margin-top: 2rem;
-  margin-bottom: 2rem;
-}
-
-.navButton {
-  font-size: 1.3rem;
-  display: inline;
-  width: 50%;
-}
-
-/* Used only on smartphones. Indicates which pane is currently active. */
-.activeNavBtn {
-  color: grey;
-}
-/* Used only on smartphones. Indicates which pane is currently inactive. */
-.inactivePane {
-  display: none;
-}
-
-.displayBlock {
-  display: block;
-}
-
-.displayAbsolute {
-  display: block;
-  position: absolute;
-}
-
-.textCenter {
-  text-align: center;
-}
-
-.nodisplay {
-  display: none;
+  flex-flow: column wrap;
+  padding: 0 1em;
 }

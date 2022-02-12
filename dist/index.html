@@ -4,6 +4,7 @@
     <title>
       Learner | learn new phrases easily
     </title>
+    <link rel="stylesheet" href="../utils.css">
     <link rel="stylesheet" href="../learner.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
   </head>
@@ -20,39 +21,48 @@
       </nav>
       <section>
         <div class="learn-pane">
-          <p>Translate</p>
+          <p id="translate-header" class="font-size-big">Translate</p>
           <div id="translated-phrase">
+            test hello world
             <!-- Content will be generated in JavaScript -->
           </div>
-          <label for="learn-phrase-input" class="displayBlock text-center">Enter your translation:</label>
-          <input type="text" id="learnPhraseInput" name="learnPhrase" size="30">
-
-            <button id="checkBtn">Check</button>
-            <p id="resultText">
-              <!-- Content will by dynamically generated -->
-            </p>
+          <div class="input-vertical-container">
+            <label for="learn-phrase-input" class="display-block text-center">Enter your translation:</label>
+            <input type="text" id="learn-phrase-input" name="learn-phrase" size="30">
+          </div>
+          <button id="check-btn" class="btn-big display-block">Check</button>
+          <div id="result-text">
+            <!-- Content will be generated in JavaScript -->
+          </div>
             <!-- Button shown only when phrase is incorrect -->
-            <button id="nextButton" class="inactive">Next</button>
-          </div>
+          <button id="next-btn" class="btn-big display-block">Next</button>
+        </div>
       </section>
 
-      <section id="managePane" class="inactivePane">
-          <ul id="phrasesList"></ul>
+      <section>
+        <div class="manage-pane hidden">
+          <ul class="phrases-list">
+            <!-- Will be filled in JavaScript -->
+          </ul>
           <button type="button">New</button>
-          <div class="phraseInputDialog">
-            <label for="originalTextInput">
-              Original text:
-            </label>
-            <input id="originalTextInput" type="text" />
-            <label for="translatedTextInput">
-             Translated text:
-            </label>
-            <input id="translatedTextInput" type="text" />
-            <button id="editCloseButton">Close</button>
-            <button id="editConfirmButton">Confirm</button>
+          <div class="dialog input-dialog hidden">
+            <div class="input-vertical-container">
+              <label for="original-text-input">
+                Original text:
+              </label>
+              <input id="original-text-input" type="text" />
+            </div>
+            <div class="input-horizontal-container">
+              <label for="translated-text-input">
+                Translated text:
+              </label>
+              <input id="translated-text-input" type="text" />
+            </div>
+            <button class="dialog-button-close">Close</button>
+            <button class="dialog-button-confirm">Confirm</button>
           </div>
+        </div>
       </section>
-
     </main>
     <footer>
       Application created by Damian Kuriata
