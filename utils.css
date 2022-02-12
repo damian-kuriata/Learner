@@ -1,0 +1,51 @@
+.btn-medium {
+  font-size: 1em;
+}
+
+.btn-big {
+  font-size: 1.2em;
+}
+
+.position-absolute {
+  position: absolute;
+}
+
+.position-relative {
+  position: relative;
+}
+
+.hidden {
+  display: none;
+}
+
+.display-block {
+  display: block;
+}
+
+.display-flex {
+  display: flex;
+}
+
+.display-inline-block {
+  display: inline-block;
+}
+
+.display-inline {
+  display: inline;
+}
+
+.font-size-small {
+  font-size: 0.7em;
+}
+
+.font-size-medium {
+  font-size: 1.2em;
+}
+
+.font-size-big {
+  font-size: 1.5em;
+}
+
+.text-center {
+  text-align: center;
+}
