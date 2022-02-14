@@ -14,13 +14,18 @@
         <!-- Buttons that switch between "learn" and "manage" panes on
           mobile phones. For desktop there is only one big pane so
           buttons are not visible -->
-        <div class="nav-buttons">
+        <div class="nav">
           <button class="nav-btn">Learn</button>
           <button class="nav-btn">Manage</button>
+          <button class="nav-btn">New</button>
+          <form id="search">
+            <input type="search" placeholder="Text"></input>
+
+          </form>
         </div>
       </nav>
       <section>
-        <div class="learn-pane">
+        <div class="pane learn-pane hidden">
           <p id="translate-header" class="font-size-big">Translate</p>
           <div id="translated-phrase">
             test hello world
@@ -35,38 +40,122 @@
             <!-- Content will be generated in JavaScript -->
           </div>
             <!-- Button shown only when phrase is incorrect -->
-          <button id="next-btn" class="btn-big display-block">Next</button>
+          <button id="next-btn" class="btn-big display-block hidden">Next</button>
         </div>
       </section>
 
       <section>
-        <div class="manage-pane hidden">
+        <div class="pane manage-pane">
           <ul class="phrases-list">
+            <!-- Here id is necessary -->
+            <li id="2137">
+              <span class="list-header">
+                1.
+              </span>
+              <p>originalassa aassasaas sasa asa ssasasa as assa sasa sa sasasaasasas </p>
+              <p>translated
+              <div>
+                <button id="edit2137">Edit</button>
+                <button id="delete2137">Del</button>
+              </div>
+            </li>
+            <li id="2137">
+              <p>original</p>
+              <p>translated</p>
+              <div>
+                <button id="edit2137">Edit</button>
+                <button id="delete2137">Del</button>
+              </div>
+            </li>
+            <li id="2137">
+              <p>originalassa aassasaas sasa asa ssasasa as assa sasa sa sasasaasasas </p>
+              <p>translated
+              <div>
+                <button id="edit2137">Edit</button>
+                <button id="delete2137">Del</button>
+              </div>
+            </li>
+            <li id="2137">
+              <p>originalassa aassasaas sasa asa ssasasa as assa sasa sa sasasaasasas </p>
+              <p>translated
+              <div>
+                <button id="edit2137">Edit</button>
+                <button id="delete2137">Del</button>
+              </div>
+            </li>
+            <li id="2137">
+              <p>originalassa aassasaas sasa asa ssasasa as assa sasa sa sasasaasasas </p>
+              <p>translated
+              <div>
+                <button id="edit2137">Edit</button>
+                <button id="delete2137">Del</button>
+              </div>
+            </li>
+            <li id="2137">
+              <p>originalassa aassasaas sasa asa ssasasa as assa sasa sa sasasaasasas </p>
+              <p>translated
+              <div>
+                <button id="edit2137">Edit</button>
+                <button id="delete2137">Del</button>
+              </div>
+            </li>
+            <li id="2137">
+              <p>originalassa aassasaas sasa asa ssasasa as assa sasa sa sasasaasasas </p>
+              <p>translated
+              <div>
+                <button id="edit2137">Edit</button>
+                <button id="delete2137">Del</button>
+              </div>
+            </li>
+            <li id="2137">
+              <p>originalassa aassasaas sasa asa ssasasa as assa sasa sa sasasaasasas </p>
+              <p>translated
+              <div>
+                <button id="edit2137">Edit</button>
+                <button id="delete2137">Del</button>
+              </div>
+            </li>
+            <li id="2137">
+              <p>originalassa aassasaas sasa asa ssasasa as assa sasa sa sasasaasasas </p>
+              <p>translated
+              <div>
+                <button id="edit2137">Edit</button>
+                <button id="delete2137">Del</button>
+              </div>
+            </li>
+
             <!-- Will be filled in JavaScript -->
           </ul>
-          <button type="button">New</button>
-          <div class="dialog input-dialog hidden">
+          <div id="phrase-input-dialog" class="dialog form-dialog">
+            <button class="dialog-close-btn" aria-label="Close dialog"> X</button>
+            <div class="dialog-btn-separator" aria-hidden="true">
+              <!-- Empty -->
+            </div>
             <div class="input-vertical-container">
               <label for="original-text-input">
                 Original text:
               </label>
               <input id="original-text-input" type="text" />
             </div>
-            <div class="input-horizontal-container">
+            <div class="input-vertical-container">
               <label for="translated-text-input">
                 Translated text:
               </label>
               <input id="translated-text-input" type="text" />
             </div>
-            <button class="dialog-button-close">Close</button>
-            <button class="dialog-button-confirm">Confirm</button>
+            <div class="dialog-bottom-btns">
+              <button class="dialog-cancel-btn">Cancel</button>
+              <button class="dialog-confirm-btn">Confirm</button>
+            </div>
+
           </div>
         </div>
       </section>
     </main>
+    <!--
     <footer>
       Application created by Damian Kuriata
-    </footer>
+    </footer>-->
     <script src="main.js"></script>
   </body>
 </html>

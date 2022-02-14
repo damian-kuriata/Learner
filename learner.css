@@ -31,8 +31,6 @@ main {
 }
 
 footer {
-  position: absolute;
-  bottom: 0;
   text-align: center;
   width: 100vw;
   font-size: 0.5rem;
@@ -80,16 +78,25 @@ input {
   color: white;
 }
 
-input[type="text"] {
+input:focus {
+  outline: 3px solid grey;
+}
+
+input[type="text"], input[type="search"] {
   border: none;
   border-bottom: 3px white solid;
   background-color: rgba(255, 255, 255, 0); /* Fully opaque */
   font: inherit;
 }
 
-input[type="text"]:focus {
-  outline: 3px solid grey;
+input[type="search"] {
+  background-color: #666666;
 }
+
+input[type="search"]::placeholder {
+  color: #d1d1d1;
+}
+
 
 label {
   font-size: 1.1em;
@@ -100,14 +107,36 @@ label::first-letter {
   text-transform: capitalize; /* Always capitalized first letter */
 }
 
-nav > .nav-buttons {
+nav > .nav {
   display: flex;
-  justify-content: space-between;
+  align-items: stretch;
+  gap: 0.5em;
+  padding: 0.5em 0.4em 0.5em;
+  margin-bottom: 1em;
+}
+
+nav > .nav > .nav-btn {
+  font-size: 1.3em;
+  font-weight: 500;
+  flex-grow: 3;
+}
+
+.nav > .nav-btn:focus {
+  color: grey;
+  outline: none;
+}
+
+nav input {
+  flex-grow: 3;
+}
+
+section > .pane {
+  width: 80%;
+  margin: auto;
 }
 
 section > .learn-pane {
-  width: 80%;
-  margin: auto;
+
 }
 
 section #translated-phrase {
@@ -127,13 +156,32 @@ section > .learn-pane .input-vertical-container > label {
   margin-bottom: 0.5em;
 }
 
+#search {
+  margin: 0;
+  padding: 0;
+  line-height: inherit;
+  display: inline;
+}
+
+#search > * {
+  height: 100%;
+}
+
+#search input {
+
+}
+
+#search > button {
+
+}
+
 #translate-header {
   text-align: center;
   margin: 2em auto;
 }
 
 #check-btn {
-  margin: auto;
+  margin: 4em auto;
 }
 
 #next-btn {
@@ -146,19 +194,107 @@ section > .learn-pane .input-vertical-container > label {
   overflow: auto;
 }
 
-.nav-btn {
-  font-size: 1.3em;
-  font-weight: 500;
-  width: 25%;
+.quick-access {
+  display: flex;
+  justify-content: space-between;
+  margin: 1.5em 1em 2em;
 }
 
-.nav-btn:focus {
-  color: grey;
-  outline: none;
+.phrases-list {
+  padding-inline-start: 0;
+  max-height: 1000vh;
+  overflow-y: auto;
+}
+
+.phrases-list > li {
+  display: flex;
+  flex-flow: column nowrap;
+  border: 3px solid grey;
+  border-radius: 5px;
+  margin-bottom: 1em;
+  padding: 0.3em;
+}
+
+.phrases-list > li:hover {
+  background: #303030;
+  cursor: pointer;
+}
+
+.phrases-list .list-header {
+  font-weight: bold;
+  border-radius: 100em; /* circular border */
+  text-align: center;
+  background: grey;
+  width: 2.5em;
+}
+.phrases-list > li > p {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  margin-left: 0.6em;
+  font-size: 1.1em;
+}
+
+.phrases-list > li > div {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1em;
+  margin-top: 1em;
+}
+
+.phrases-list > li > div > button {
+  flex-basis: 25%;
 }
 
 .input-vertical-container {
   display: flex;
   flex-flow: column wrap;
   padding: 0 1em;
+}
+
+.dialog {
+  font-size: 1.2em;
+  border: 3px solid grey;
+  border-radius: 3px;
+  min-height: 5%;
+  z-index: 999;
+  padding: 5px;
+  background: black;
+  position: fixed;
+  /* Center horizontally in fixed position */
+  left: 50%;
+  transform: translateX(-50%);
+  top: 5em;
+}
+
+.input-vertical-container {
+  display: flex;
+  flex-flow: column nowrap;
+  padding: 0.5em;
+  gap: 5px;
+  width: 75vw;
+}
+
+.dialog > .dialog-close-btn {
+  position: absolute;
+  right: 0;
+}
+
+/* Element with no content. Serves only as a separator */
+.dialog > .dialog-btn-separator {
+  margin-bottom: 2.5em;
+}
+
+.dialog > .dialog-bottom-btns {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+}
+.dialog .dialog-cancel-btn {
+
+}
+
+.dialog .dialog-confirm-btn {
+
 }

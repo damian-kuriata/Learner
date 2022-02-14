@@ -1,4 +1,5 @@
 export default class PhraseInputDialog {
+  constructor ()
   constructor (originalText="", translatedText="") {
     this.container = document.querySelector(".phraseInputDialog");
     this.originalTextInput = document.querySelector("#originalTextInput");
