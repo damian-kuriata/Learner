@@ -15,7 +15,7 @@
           mobile phones. For desktop there is only one big pane so
           buttons are not visible -->
         <div class="nav">
-          <button class="nav-btn">Learn</button>
+          <button class="nav-btn active-nav-btn">Learn</button>
           <button class="nav-btn">Manage</button>
           <button class="nav-btn">New</button>
           <form id="search">
@@ -25,7 +25,7 @@
         </div>
       </nav>
       <section>
-        <div class="pane learn-pane hidden">
+        <div id="learn-pane" class="pane learn-pane hidden">
           <p id="translate-header" class="font-size-big">Translate</p>
           <div id="translated-phrase">
             test hello world
@@ -45,7 +45,7 @@
       </section>
 
       <section>
-        <div class="pane manage-pane">
+        <div id="manage-pane" class="pane manage-pane">
           <ul class="phrases-list">
             <!-- Here id is necessary -->
             <li id="2137">
@@ -126,7 +126,7 @@
 
             <!-- Will be filled in JavaScript -->
           </ul>
-          <div id="phrase-input-dialog" class="dialog form-dialog">
+          <div id="phrase-input-dialog" class="dialog form-dialog hidden">
             <button class="dialog-close-btn" aria-label="Close dialog"> X</button>
             <div class="dialog-btn-separator" aria-hidden="true">
               <!-- Empty -->

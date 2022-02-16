@@ -122,6 +122,7 @@ nav > .nav > .nav-btn {
   font-size: 1.3em;
   font-weight: 500;
   flex-grow: 3;
+  flex-shrink: 3;
 }
 
 .nav > .nav-btn:focus {
@@ -129,8 +130,9 @@ nav > .nav > .nav-btn {
   outline: none;
 }
 
-nav input {
+nav form {
   flex-grow: 3;
+  flex-shrink: 3;
 }
 
 section > .pane {
@@ -171,7 +173,7 @@ section > .learn-pane .input-vertical-container > label {
 }
 
 #search input {
-
+  width: 80%;
 }
 
 #search > button {
@@ -311,4 +313,8 @@ section > .learn-pane .input-vertical-container > label {
 
 .dialog .dialog-confirm-btn {
 
+}
+
+.active-nav-btn {
+  color: grey;
 }

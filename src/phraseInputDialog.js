@@ -11,36 +11,40 @@ export default class PhraseInputDialog {
     //HTML
     this.container = htmlElements["container"];
     this.originalTextInput = htmlElements["originalTextInput"];
+    this.originalTextInput.value = originalText;
     this.translatedTextInput = htmlElements["translatedTextInput"];
+    this.translatedTextInput.value = translatedText;
     this.confirmButton = htmlElements["confirmButton"];
     this.closeButton = htmlElements["closeButton"];
     this.cancelButton = htmlElements["cancelButton"];
 
     // Handlers
-    // Directly connect external handlers to elements.
-    this.originalTextInput.onChange = handlers["originalTextInput"];
-    this.translatedTextInput.onChange = handlers["translatedTextInput"];
-    this.confirmButton.onClick = handlers["confirmButton"];
-    this.closeButton.onClick = handlers["closeButton"];
-    this.cancelButton.onClick = handlers["cancelButton"];
-  }
-
-  // TODO: Write method.
-  setInputValues () {
-    // Note that once values are set, parent does not receive an event.
-    if (all) {
-      this.originalTextInput.value = "";
-      this.translatedTextInput.value = "";
-    } else {
-      names.forEach(name => this[name].value = "");
+    try {
+      // Directly connect external handlers to elements.
+      this.originalTextInput.onchange = handlers["originalTextInput"];
+      this.translatedTextInput.onchange = handlers["translatedTextInput"];
+      this.confirmButton.onclick = handlers["confirmButton"];
+      this.closeButton.onclick = handlers["closeButton"];
+      this.cancelButton.onclick = handlers["cancelButton"];
+    } catch (err) {
+      // An exception may be thrown when accessing property that has not been
+      // Initialized. Ignore it.
     }
   }
 
-  hide () {
-    this.container.classList.add("hidden");
+  setOriginalTextValue (value) {
+    if (!this.originalTextInput) {
+      throw new Error("No text input present");
+    }
+    this.originalText = value;
+    this.originalTextInput.value = value;
   }
 
-  show () {
-    this.container.classList.remove("hidden")
+  setTranslatedTextValue (value) {
+    if (!this.translatedTextInput) {
+      throw new Error("No text input present");
+    }
+    this.translatedText = value;
+    this.translatedTextInput.value = value;
   }
 }
