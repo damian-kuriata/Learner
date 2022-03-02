@@ -4,8 +4,8 @@
     <title>
       Learner | learn new phrases easily
     </title>
-    <link rel="stylesheet" href="../utils.css">
-    <link rel="stylesheet" href="../learner.css">
+    <link rel="stylesheet" href="utils.css">
+    <link rel="stylesheet" href="learner.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
   </head>
   <body>
@@ -17,35 +17,36 @@
         <div class="nav">
           <button class="nav-btn active-nav-btn">Learn</button>
           <button class="nav-btn">Manage</button>
-          <button class="nav-btn">New</button>
           <form id="search">
             <input type="search" placeholder="Text"></input>
-            <button type="submit">&#x1F50E;&#xFE0E;</button>
+            <button type="submit">S</button>
           </form>
         </div>
       </nav>
       <section>
-        <div id="learn-pane" class="pane learn-pane hidden">
+        <div id="learn-pane" class="pane learn-pane">
           <p id="translate-header" class="font-size-big">Translate</p>
           <div id="translated-phrase">
-            test hello world
             <!-- Content will be generated in JavaScript -->
           </div>
           <div class="input-vertical-container">
             <label for="learn-phrase-input" class="display-block text-center">Enter your translation:</label>
             <input type="text" id="learn-phrase-input" name="learn-phrase" size="30">
           </div>
-          <button id="check-btn" class="btn-big display-block">Check</button>
-          <div id="result-text">
+          <div class="btns-container">
+            <button id="check-btn" class="btn-big">Check</button>
+            <button id="next-btn" class="btn-big">Next</button>
+          </div>
+          <div id="result-text" class="feedback-incorrect">
+            test content
             <!-- Content will be generated in JavaScript -->
           </div>
-            <!-- Button shown only when phrase is incorrect -->
-          <button id="next-btn" class="btn-big display-block hidden">Next</button>
         </div>
       </section>
 
       <section>
-        <div id="manage-pane" class="pane manage-pane">
+        <div id="manage-pane" class="pane manage-pane hidden">
+          <div id="toast"> </div>
           <ul class="phrases-list">
             <!-- Here id is necessary -->
             <li id="2137">
@@ -126,36 +127,40 @@
 
             <!-- Will be filled in JavaScript -->
           </ul>
-          <div id="phrase-input-dialog" class="dialog form-dialog hidden">
-            <button class="dialog-close-btn" aria-label="Close dialog"> X</button>
-            <div class="dialog-btn-separator" aria-hidden="true">
-              <!-- Empty -->
+            <div style="text-align: center">
+              <button type="button" id="new-button" class="btn-big">New</button>
             </div>
-            <div class="input-vertical-container">
-              <label for="original-text-input">
-                Original text:
-              </label>
-              <input id="original-text-input" type="text" />
-            </div>
-            <div class="input-vertical-container">
-              <label for="translated-text-input">
-                Translated text:
-              </label>
-              <input id="translated-text-input" type="text" />
-            </div>
-            <div class="dialog-bottom-btns">
-              <button class="dialog-cancel-btn">Cancel</button>
-              <button class="dialog-confirm-btn">Confirm</button>
-            </div>
-
-          </div>
         </div>
       </section>
+      <aside>
+        <div id="phrase-input-dialog" class="dialog form-dialog hidden">
+          <button class="dialog-close-btn" aria-label="Close dialog"> X</button>
+          <div class="dialog-btn-separator" aria-hidden="true">
+            <!-- Empty -->
+          </div>
+          <div class="input-vertical-container">
+            <label for="original-text-input">
+              Original text:
+            </label>
+            <input id="original-text-input" type="text" />
+          </div>
+          <div class="input-vertical-container">
+            <label for="translated-text-input">
+              Translated text:
+            </label>
+            <input id="translated-text-input" type="text" />
+          </div>
+          <div class="dialog-bottom-btns">
+            <button class="dialog-cancel-btn">Cancel</button>
+            <button class="dialog-confirm-btn">Confirm</button>
+          </div>
+        </div>
+      </aside>
     </main>
     <!--
     <footer>
       Application created by Damian Kuriata
     </footer>-->
-    <script src="main.js"></script>
+    <script src="dist/main.js"></script>
   </body>
 </html>

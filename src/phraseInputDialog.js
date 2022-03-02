@@ -1,34 +1,38 @@
+import hideableMixin from "./HideableMixin";
+
 export default class PhraseInputDialog {
-  constructor (htmlElements, handlers, originalText="", translatedText="") {
-    // htmlElements = [{"elementName": element}]
+  #handlers;
+  #inEdit;
+
+  constructor (handlers, originalText="", translatedText="") {
     this.originalText = originalText;
     this.translatedText = translatedText;
+    this.#handlers = handlers;
+    this.#inEdit = false;
 
-    if (!htmlElements || !handlers) {
+
+    if (!handlers) {
       return;
     }
 
     //HTML
-    this.container = htmlElements["container"];
-    this.originalTextInput = htmlElements["originalTextInput"];
+    this.container = document.querySelector("#phrase-input-dialog");
+    this.originalTextInput = document.querySelector("#original-text-input");
+    this.translatedTextInput = document.querySelector("#translated-text-input");
+    this.confirmButton = document.querySelector(".dialog-confirm-btn");
+    this.cancelButton = document.querySelector(".dialog-cancel-btn");
+    this.closeButton = document.querySelector(".dialog-close-btn");
     this.originalTextInput.value = originalText;
-    this.translatedTextInput = htmlElements["translatedTextInput"];
     this.translatedTextInput.value = translatedText;
-    this.confirmButton = htmlElements["confirmButton"];
-    this.closeButton = htmlElements["closeButton"];
-    this.cancelButton = htmlElements["cancelButton"];
 
-    // Handlers
-    try {
-      // Directly connect external handlers to elements.
-      this.originalTextInput.onchange = handlers["originalTextInput"];
-      this.translatedTextInput.onchange = handlers["translatedTextInput"];
-      this.confirmButton.onclick = handlers["confirmButton"];
-      this.closeButton.onclick = handlers["closeButton"];
-      this.cancelButton.onclick = handlers["cancelButton"];
-    } catch (err) {
-      // An exception may be thrown when accessing property that has not been
-      // Initialized. Ignore it.
+    for (let handlerName in handlers) {
+      if (!this[handlerName]) continue;
+      if (this[handlerName] instanceof HTMLButtonElement) {
+        this[handlerName].onclick = handlers[handlerName];
+      } else {
+        this[handlerName].onchange = handlers[handlerName];
+        console.log(this[handlerName]);
+      }
     }
   }
 
@@ -45,6 +49,30 @@ export default class PhraseInputDialog {
       throw new Error("No text input present");
     }
     this.translatedText = value;
-    this.translatedTextInput.value = value;
+    this.translatedTextInput.value = value
+  }
+
+  destroy () {
+    for (let elemName in this) {
+      // Container does not have event handlers attached.
+      if (elemName === "container") {
+        continue;
+      }
+      let ev;
+      if (elemName.endsWith("Input")) {
+        ev = "change";
+      } else if (elemName.endsWith("Button")) {
+        ev = "click";
+      }
+      this[elemName].removeEventListener(ev, this.#handlers[elemName]);
+    }
+  }
+
+  set inEdit (val) {
+    this.#inEdit = val;
+  }
+
+  get inEdit () {
+    return this.#inEdit;
   }
 }

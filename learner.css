@@ -2,7 +2,7 @@
   url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
 }
 
-* {
+*, *::before, *::after {
   line-height: 1.6;
   color: white;
   box-sizing: border-box;
@@ -28,6 +28,8 @@ nav {
 
 main {
   height: 100%;
+  display: flex;
+  flex-flow: column nowrap;
 }
 
 footer {
@@ -144,10 +146,16 @@ section > .learn-pane {
 
 }
 
+section > .learn-pane > .btns-container {
+  display: flex;
+  justify-content: space-around;
+}
+
 section #translated-phrase {
   margin: 0 auto 1em;
   font-size: 1.2em;
-  color: #9d4dff;
+  color: inherit;
+  font-weight: bold;
   text-align: center;
   height: 4em;
   overflow: auto;
@@ -197,17 +205,19 @@ section > .learn-pane .input-vertical-container > label {
 }
 
 #check-btn {
-  margin: 4em auto;
+
 }
 
 #next-btn {
-  margin: auto;
+
 }
 
 #result-text {
-  margin: 2em auto;
-  height: 3em;
+  margin: 5em auto 1em;
+  height: 5em;
   overflow: auto;
+  text-align: center;
+  font-size: 1.2em;
 }
 
 .quick-access {
@@ -218,17 +228,22 @@ section > .learn-pane .input-vertical-container > label {
 
 .phrases-list {
   padding-inline-start: 0;
-  max-height: 1000vh;
+  height: 70vh;
   overflow-y: auto;
 }
 
 .phrases-list > li {
-  display: flex;
-  flex-flow: column nowrap;
+
   border: 3px solid grey;
+
   border-radius: 5px;
   margin-bottom: 1em;
   padding: 0.3em;
+
+}
+
+.phrases-list button {
+  width: 20%;
 }
 
 .phrases-list > li:hover {
@@ -252,14 +267,14 @@ section > .learn-pane .input-vertical-container > label {
 }
 
 .phrases-list > li > div {
-  display: flex;
-  justify-content: flex-end;
-  gap: 1em;
-  margin-top: 1em;
+  width: 50%;
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .phrases-list > li > div > button {
-  flex-basis: 25%;
+
 }
 
 .input-vertical-container {
@@ -317,4 +332,22 @@ section > .learn-pane .input-vertical-container > label {
 
 .active-nav-btn {
   color: grey;
+}
+
+.feedback-incorrect {
+  color: red;
+  font-weight: bold;
+}
+
+.phrases-list {
+
+}
+
+#toast {
+  transition: transform 220ms ease-out;
+  transform: scale(0);
+}
+
+.toast-shown {
+  transform: scale(1);
 }

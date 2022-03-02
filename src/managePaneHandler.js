@@ -1,10 +1,15 @@
 import Phrase from "language_phrase";
 import PhraseInputDialog from "./phraseInputDialog";
+import hideableMixin from "./HideableMixin";
+import Toast from "./Toast";
 
 class PhraseList {
-  constructor(listElement) {
+  constructor(listElement, onDelete, onEdit) {
     this.listElement = listElement;
+    this.onDelete = onDelete;
+    this.onEdit = onEdit;
     this.refresh(Phrase.loadFromStorage());
+
   }
 
   refresh(phrases) {
@@ -21,29 +26,28 @@ class PhraseList {
       phraseItem.setAttribute("id", "phrase" + phraseID);
       phraseItem.innerHTML = `
         <div>
-          <span style="font-weight: bold">${idx + 1}. </span>
-          <span>${phrase.originalText}</span>
+        ${idx + 1}.${phrase.originalText}
+
         </div>
       `;
       // Append edit and delete buttons.
       const editButton = document.createElement("button");
-      editButton.classList.add("editButton");
+      editButton.classList.add("edit-button");
       editButton.setAttribute("id", "edit" + phraseID);
-      editButton.addEventListener("click", () => {
-        console.log("edit");
+      editButton.addEventListener("click", (e) => {
+        const id = e.target.getAttribute("id").slice(4); // editi<d>
+        console.log("Before: ", phrase);
+        this.onEdit(phrase);
       });
       editButton.textContent = "Edit";
 
       const deleteButton = document.createElement("button");
-      deleteButton.classList.add("deleteButton");
+      deleteButton.classList.add("delete-button");
       deleteButton.setAttribute("id", "delete" + phraseID);
       deleteButton.addEventListener("click", () => {
-        // This method will be called only when exists.
-        // Likely this method will be assigned outside of an object.
-        if (this.onPhraseDelete) {
-          const id = deleteButton.getAttribute("id").slice(6); // deleteid
-          this.onPhraseDelete(id);
-        }
+        const id = deleteButton.getAttribute("id").slice(6); // deleteid
+        console.log("Delete id: ", id);
+        this.onDelete(phrase.id);
       });
       deleteButton.textContent = "X";
       deleteButton.setAttribute("aria-label", "Delete phrase");
@@ -57,33 +61,37 @@ class PhraseList {
 
 export default class ManagePaneHandler {
   constructor (managePane) {
+    let toast = new Toast ("Hello", true, 10000);
     this.newOriginalText = "";
     this.newTranslatedText = "";
+    this.phraseEdited = null;
 
-    this.pane = managePane;
+    this.container = managePane;
      // Because methods are later passed as callbacks, their this is out of
      // Range, so at first we have to set it to as fixed value.
     this.onNewOriginalTextChange = this.onNewOriginalTextChange.bind(this);
     this.onNewTranslatedTextChange = this.onNewTranslatedTextChange.bind(this);
+    this.onPhraseEdit = this.onPhraseEdit.bind(this);
+    this.onPhraseDelete = this.onPhraseDelete.bind(this);
     this.onConfirm = this.onConfirm.bind(this);
     this.onClose = this.onClose.bind(this);
 
-    // Because only one dialog can be visible at a time, we can use just
-    // One to both create new phrases or edit old ones.
-    this.phraseInputDialog = new PhraseInputDialog();
-    this.phraseInputDialog.hide();
-    this.phraseInputDialog.onOriginalTextInputChange(this.onNewOriginalTextChange);
-    this.phraseInputDialog.onTranslatedTextInputChange(this.onNewTranslatedTextChange);
-    this.phraseInputDialog.onClose(this.onClose);
-    this.phraseInputDialog.onConfirm(this.onConfirm);
-
-    this.phraseList = new PhraseList(document.querySelector("#phrasesList"));
-    this.phraseList.onPhraseDelete = (id) => {
-      Phrase.removeFromStorage(id);
-      this.phraseList.refresh(Phrase.loadFromStorage());
+    const handlers = {
+      "originalTextInput": this.onNewOriginalTextChange,
+      "translatedTextInput": this.onNewTranslatedTextChange,
+      "closeButton": this.onClose,
+      "confirmButton": this.onConfirm,
+      // Same as close.
+      "cancelButton": this.onClose
     };
 
-    this.newButton = document.querySelector("#managePane > button");
+    this.phraseInputDialog = new PhraseInputDialog(handlers);
+    Object.assign(this.phraseInputDialog, hideableMixin);
+
+    this.phraseList = new PhraseList(document.querySelector(".phrases-list"),
+      this.onPhraseDelete, this.onPhraseEdit);
+
+    this.newButton = document.querySelector("#new-button");
     this.newButton.addEventListener("click", () => {
       this.phraseInputDialog.show();
       // Once the dialog is shown, button must be disabled to prevent
@@ -92,20 +100,50 @@ export default class ManagePaneHandler {
     });
   }
 
-  onNewOriginalTextChange (value) {
-    console.log(value);
-    this.newOriginalText = value;
+  onPhraseDelete (id) {
+    Phrase.removeFromStorage(id);
+    this.phraseList.refresh(Phrase.loadFromStorage());
   }
 
-  onNewTranslatedTextChange (value) {
-    this.newTranslatedText = value;
+  // Fired when edit phrase button is clicked
+  onPhraseEdit (phrase) {
+    this.phraseEdited = phrase;
+    console.log("Phrae in edit: ", phrase);
+    this.newOriginalText = phrase.originalText;
+    this.newTranslatedText = phrase.translatedText;
+    this.phraseInputDialog.show();
+    this.phraseInputDialog.setOriginalTextValue(phrase.originalText);
+    this.phraseInputDialog.setTranslatedTextValue(phrase.translatedText);
+  }
+
+  onNewOriginalTextChange (e) {
+    console.log("Orig:", e.target.value);
+    this.newOriginalText = e.target.value;
+  }
+
+  onNewTranslatedTextChange (e) {
+    console.log("trans: ", e.target.value);
+    this.newTranslatedText = e.target.value;
   }
 
   onConfirm () {
-    const newPhrase = new Phrase(this.newOriginalText, this.newTranslatedTex);
-    Phrase.saveToStorage(newPhrase);
+    console.log(this.newOriginalText);
+    console.log(this.newOriginalText, this.newTranslatedText);
+    let toSave;
+    if (this.phraseEdited) {
+      toSave = new Phrase(this.newOriginalText, this.newTranslatedText,
+        this.phraseEdited.id);
+    } else {
+      toSave = new Phrase(this.newOriginalText, this.newTranslatedText);
+    }
+    console.log("To save: ", toSave);
+    Phrase.saveToStorage(toSave);
     this.phraseList.refresh(Phrase.loadFromStorage());
-    this.#onInputComplete();
+    this.phraseInputDialog.setTranslatedTextValue("");
+    this.phraseInputDialog.setOriginalTextValue("");
+    this.newOriginalText = "";
+    this.newTranslatedText = "";
+    //this.#onInputComplete();
   }
 
   onClose () {
@@ -113,17 +151,13 @@ export default class ManagePaneHandler {
   }
 
   #onInputComplete () {
+    this.phraseInputDialog.hide();
+    // Important, clear internal input data.
+    this.phraseInputDialog.setTranslatedTextValue("");
+    this.phraseInputDialog.setOriginalTextValue("");
     this.newOriginalText = "";
     this.newTranslatedText = "";
     this.newButton.disabled = false;
-  }
-
-  show () {
-    this.pane.classList.remove("inactivePane");
-    this.phraseList.refresh(Phrase.loadFromStorage());
-  }
-
-  hide () {
-    this.pane.classList.add("inactivePane");
+    this.phraseEdited = null;
   }
 }

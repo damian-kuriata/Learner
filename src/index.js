@@ -6,14 +6,15 @@ import PhraseInputDialog from "./phraseInputDialog";
 
 let learnButton = document.querySelector(".nav-btn:first-child");
 let manageButton = document.querySelector(".nav-btn:nth-child(2)");
-let checkButton = document.querySelector(".nav-btn:last-child");
 let learnPane = document.querySelector("#learn-pane");
-let managepane = document.querySelector("#manage-pane");
-/*
+let managePane = document.querySelector("#manage-pane");
+
+Object.assign(LearnPaneHandler.prototype, hideableMixin);
 let learning = new LearnPaneHandler(learnPane);
-Object.assign(learning, hideableMixin);
+
+
 let manage = new ManagePaneHandler(managePane)
-Object.assign(maange, hideableMixin);*/
+Object.assign(manage, hideableMixin);
 
 let currentPane = "learning";
 
@@ -22,23 +23,20 @@ learnButton.addEventListener("click", () => {
     return;
   }
   currentPane = "learning";
-  //learning.show();
-  //manage.hide();
+  learning.show();
+  manage.hide();
   learnButton.classList.add("active-nav-btn");
   manageButton.classList.remove("active-nav-btn");
-
-//  learning.processOnePhrase();
+  learning.processOnePhrase();
 });
 
 manageButton.addEventListener("click", () => {
-  if (currentPane === "manage") {
-    return;
-  }
+  if (currentPane === "manage") return;
   currentPane = "manage";
-//  manage.show();
-//  learning.hide();
+  manage.show();
+  learning.hide();
   manageButton.classList.add("active-nav-btn");
   learnButton.classList.remove("active-nav-btn");
 });
 
-//learning.processOnePhrase();
+learning.processOnePhrase();

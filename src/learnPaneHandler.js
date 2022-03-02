@@ -1,65 +1,52 @@
+import Phrase from "language_phrase";
+
 export default class LearnPaneHandler {
   constructor(learnPane) {
-    this.pane = learnPane;
-    this.shouldLoadNext = false;
+    // Important, hide() and show() methods are inherited, and they require
+    // property named "container" to work.
+    this.container = learnPane;
     this.currentPhrase = null;
     this.translationDirection;
-    this.translatedPhrase = document.querySelector("#translatedPhrase");
-    this.learnPhraseInput = document.querySelector("#learnPhraseInput");
-    this.resultText = document.querySelector("#resultText");
+    this.translatedPhrase = document.querySelector("#translated-phrase");
+    this.learnPhraseInput = document.querySelector("#learn-phrase-input");
+    this.resultText = document.querySelector("#result-text");
     this.checkButton =
-      document.querySelector("#checkBtn");
+      document.querySelector("#check-btn");
+
     this.checkButton.addEventListener("click", () => {
-      this.checkInput();
+      if (this.currentPhrase) {
+        this.checkInput();
+      }
     });
-    this.nextButton = document.querySelector("#nextButton");
+    this.nextButton = document.querySelector("#next-btn");
     this.nextButton.addEventListener("click", () => {
       this.processOnePhrase();
     });
-    /*
-    document.body.addEventListener("click", () => {
-        console.log("anywhere");
-      if (this.shouldLoadNext) {
-        console.log("anywhere");
-        this.startLearning();
-        this.shouldLoadNext = false;
-      }
-    });
-    */
   }
 
   /* This method obtains phrase from storage and updates relevant fields. */
   processOnePhrase() {
-    this.shouldLoadNext = false;
-    this.nextButton.classList.add("nodisplay");
     this.learnPhraseInput.value = "";
     this.resultText.textContent = "";
-    ///this.checkButton.disabled = false;
     this.translationDirection = Math.floor(Math.random() * (1 - 0 + 1)) + 0;
     this.translationDirection = this.translationDirection === 0? "to":"from";
     // Obtain next phrase random.
     this.currentPhrase = Phrase.loadFromStorage(false);
-    // Empty array means that no phrases exist.
-    console.log("Current: ", this.currentPhrase);
-    if (this.currentPhrase === []) {
-      this.resultText.textContent = "At first add phrases!";
+    // Array instance is returned in case of empty data.
+    if (this.currentPhrase instanceof Array) {
+      this.translatedPhrase.textContent = "At first add phrases!";
       this.currentPhrase = null;
       return;
     }
     if (this.translationDirection === "to") {
-      this.translatedPhrase.textContent = this.currentPhrase.translatedText;
+      this.translatedPhrase.textContent =
+        this.currentPhrase.translatedText;
     } else {
-      this.translatedPhrase.textContent = this.currentPhrase.originalText;
+      this.translatedPhrase.textContent =
+        this.currentPhrase.originalText;
     }
   }
 
-  stopLearning() {
-    currentPhrase = null;
-  }
-
-  /* Obtains value from input and calls appropriate method depending on
-     value was correct or not.
-  */
   checkInput () {
     let userTranslation = this.learnPhraseInput.value;
     let correct =
@@ -73,9 +60,7 @@ export default class LearnPaneHandler {
   }
 
   #onCorrectInput () {
-    this.resultText.textContent = "Correct";
-    this.resultText.classList.add("feedbackCorrect");
-    setTimeout(this.processOnePhrase, 2000);
+    this.processOnePhrase();
   }
 
   #onIncorrectInput () {
@@ -85,17 +70,6 @@ export default class LearnPaneHandler {
     } else {
       this.resultText.textContent += this.currentPhrase.translatedText;
     }
-    this.resultText.classList.add("feedbackTryAgain");
-    this.nextButton.classList.remove("nodisplay");
-    this.nextButton.classList.add("displayBlock");
-    this.shouldLoadNext = true;
-  }
-
-  show () {
-    this.pane.classList.remove("inactivePane");
-  }
-
-  hide () {
-    this.pane.classList.add("inactivePane");
+    this.resultText.classList.add("feedback-incorrect");
   }
 }
