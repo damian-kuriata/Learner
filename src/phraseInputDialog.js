@@ -1,10 +1,11 @@
-import hideableMixin from "./HideableMixin";
+import Hideable from "./HideableMixin";
 
-export default class PhraseInputDialog {
+export default class PhraseInputDialog extends Hideable {
   #handlers;
   #inEdit;
 
   constructor (handlers, originalText="", translatedText="") {
+    super();
     this.originalText = originalText;
     this.translatedText = translatedText;
     this.#handlers = handlers;

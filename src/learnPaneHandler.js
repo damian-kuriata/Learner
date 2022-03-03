@@ -1,7 +1,9 @@
 import Phrase from "language_phrase";
+import Hideable from "./HideableMixin";
 
-export default class LearnPaneHandler {
+export default class LearnPaneHandler extends Hideable {
   constructor(learnPane) {
+    super();
     // Important, hide() and show() methods are inherited, and they require
     // property named "container" to work.
     this.container = learnPane;

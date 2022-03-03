@@ -1,15 +1,14 @@
 import Phrase from "language_phrase";
 import PhraseInputDialog from "./phraseInputDialog";
-import hideableMixin from "./HideableMixin";
+import Hideable from "./HideableMixin";
 import Toast from "./Toast";
 
-class PhraseList {
+class PhraseList  {
   constructor(listElement, onDelete, onEdit) {
     this.listElement = listElement;
     this.onDelete = onDelete;
     this.onEdit = onEdit;
     this.refresh(Phrase.loadFromStorage());
-
   }
 
   refresh(phrases) {
@@ -59,12 +58,13 @@ class PhraseList {
   }
 }
 
-export default class ManagePaneHandler {
+export default class ManagePaneHandler extends Hideable {
   constructor (managePane) {
-    let toast = new Toast ("Hello", true, 10000);
+    super();
     this.newOriginalText = "";
     this.newTranslatedText = "";
     this.phraseEdited = null;
+    this.searchTerm = "";
 
     this.container = managePane;
      // Because methods are later passed as callbacks, their this is out of
@@ -85,11 +85,10 @@ export default class ManagePaneHandler {
       "cancelButton": this.onClose
     };
 
-    this.phraseInputDialog = new PhraseInputDialog(handlers);
-    Object.assign(this.phraseInputDialog, hideableMixin);
-
     this.phraseList = new PhraseList(document.querySelector(".phrases-list"),
       this.onPhraseDelete, this.onPhraseEdit);
+
+    this.phraseInputDialog = new PhraseInputDialog(handlers);
 
     this.newButton = document.querySelector("#new-button");
     this.newButton.addEventListener("click", () => {
@@ -102,7 +101,8 @@ export default class ManagePaneHandler {
 
   onPhraseDelete (id) {
     Phrase.removeFromStorage(id);
-    this.phraseList.refresh(Phrase.loadFromStorage());
+    const  phrases = Phrase.loadFromStorage();
+    this.phraseList.refresh(phrases);
   }
 
   // Fired when edit phrase button is clicked
@@ -138,7 +138,8 @@ export default class ManagePaneHandler {
     }
     console.log("To save: ", toSave);
     Phrase.saveToStorage(toSave);
-    this.phraseList.refresh(Phrase.loadFromStorage());
+    const  phrases = Phrase.loadFromStorage();
+    this.phraseList.refresh(phrases);
     this.phraseInputDialog.setTranslatedTextValue("");
     this.phraseInputDialog.setOriginalTextValue("");
     this.newOriginalText = "";
@@ -160,4 +161,40 @@ export default class ManagePaneHandler {
     this.newButton.disabled = false;
     this.phraseEdited = null;
   }
+
+  /* -- Override methods from Hideable */
+  show (...params) {
+    super.show(params);
+
+    // Search term has been passed?
+    if (params[0]) {
+      this.searchTerm = params[0];
+      // Force list refresh.
+      const  phrases = Phrase.loadFromStorage();
+      console.log(params[0]);
+      this.phraseList.refresh( filterPhrases(phrases, this.searchTerm) );
+    }
+  }
+}
+
+function filterPhrases (phrases, searchTerm, caseSensitive=false) {
+  // Get all phrases beginning with searchTerm.
+  if (phrases instanceof Array === false) {
+    throw new Error("Array instance must be passed");
+  }
+  const res =  phrases.filter((phrase) => {
+    // Convert to lower case when needed.
+    if (caseSensitive) {
+      phrase.originalText = phrase.originalText.toLowerCase();
+      phrase.translatedText = phrase.translatedText.toLowerCase();
+    }
+    if (phrase.originalText.startsWith(searchTerm) ||
+        phrase.translatedText.startsWith(searchTerm)) {
+          return true;
+        }
+        return false;
+  });
+
+  console.log(res);
+  return res;
 }
