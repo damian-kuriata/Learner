@@ -40,6 +40,7 @@ function onSearchSubmit (ev) {
   switchPane("manage", searchValue);
   console.log("submit");
   ev.preventDefault();
+  return false;
 }
 
 function switchPane (paneName, ...params) {
