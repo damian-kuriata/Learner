@@ -91,9 +91,9 @@ export default  class Phrase {
     // Make sure prevIndex is different from randomIndex.
     do {
       randomIndex = Math.floor(Math.random() * (max - min) + min);
-    } while (loadFromStorage.prevIndex === randomIndex);
+    } while (Phrase.loadFromStorage.prevIndex === randomIndex);
 
-    loadFromStorage.prevIndex = randomIndex;
+    Phrase.loadFromStorage.prevIndex = randomIndex;
     return allPhrases[randomIndex];
   }
 
