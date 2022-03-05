@@ -97,6 +97,16 @@ export default class ManagePaneHandler extends Hideable {
       // Multiple opened dialogs.
       this.newButton.disabled = true;
     });
+
+    this.clearAllButton = document.querySelector("#clear-all-button");
+    this.clearAllButton.addEventListener("click", () => {
+      // Delete all phrases.
+      const all = Phrase.loadFromStorage(true);
+      for (let one of all) {
+        Phrase.removeFromStorage(one.id);
+      }
+      this.phraseList.refresh([]);
+    });
   }
 
   onPhraseDelete (id) {

@@ -4,7 +4,7 @@
   "description": "Very simple module that operates on language phrases.",
   "main": "phrase.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -14,5 +14,8 @@
   "license": "ISC",
   "dependencies": {
     "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "jest": "^27.5.1"
   }
 }
