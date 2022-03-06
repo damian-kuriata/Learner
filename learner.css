@@ -88,6 +88,13 @@ input:focus {
   outline: 3px solid grey;
 }
 
+input[type="file"] {
+  appearance: none;
+}
+
+input[type="file"]::file-upload-button {
+  color: red;
+}
 input[type="text"], input[type="search"] {
   border: none;
   border-bottom: 3px white solid;

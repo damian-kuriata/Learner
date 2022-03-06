@@ -107,6 +107,20 @@ export default class ManagePaneHandler extends Hideable {
       }
       this.phraseList.refresh([]);
     });
+
+    this.phrasesFileForm = document.querySelector("#file-form");
+    this.phrasesFileForm.addEventListener("submit", async (ev) => {
+      ev.preventDefault();
+      const file =
+        document.querySelector("#phrases-file").files[0];
+
+      const loadedPhrases = await loadPhrasesFromFile(file);
+      // Save to storage.
+      for (const phrase of loadedPhrases) {
+        Phrase.saveToStorage(phrase);
+      }
+      this.phraseList.refresh(Phrase.loadFromStorage());
+    });
   }
 
   onPhraseDelete (id) {
@@ -205,6 +219,28 @@ function filterPhrases (phrases, searchTerm, caseSensitive=false) {
         return false;
   });
 
-  console.log(res);
   return res;
+}
+
+async function loadPhrasesFromFile (fileInstance) {
+  const separator = ":";
+
+  if (fileInstance instanceof File === false) {
+    throw new Error("File instance must be provided");
+  }
+
+  let phrases = [];
+  let textContents = await fileInstance.text();
+  // For some reason, text sometimes contains '/r' character. Remove it.
+  textContents.replaceAll("/r","");
+  // For each line.
+  for (let line of textContents.split("\n")) {
+    let [beforeSep, afterSep] = line.split(separator);
+    let originalText = beforeSep.trim();
+    let translatedText = afterSep.trim();
+    let newPhrase = new Phrase(originalText, translatedText);
+
+    phrases.push(newPhrase);
+  }
+  return phrases;
 }

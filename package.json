@@ -4,7 +4,11 @@
   "description": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack"
+    "build": "webpack",
+	"start": "webpack && npx live-server",
+	"custom": "echo 'hell world'",
+	"precustom": "echo 'precustom'",
+	"postcustom": "echo 'postcustom'"
   },
   "private": true,
   "keywords": [],
