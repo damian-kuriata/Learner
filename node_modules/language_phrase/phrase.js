@@ -42,7 +42,8 @@ export default  class Phrase {
     if (direction !== "to" && direction !== "from") {
       throw new Error("Wrong direction");
     }
-    let tmp = this;
+    let tmp = {};
+    Object.assign(tmp, this);
     // Replace german and polish letters
     tmp.translatedText = tmp.translatedText.toLowerCase().trim();
     tmp.translatedText = replaceCharacters(tmp.translatedText);
