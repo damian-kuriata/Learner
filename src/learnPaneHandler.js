@@ -20,6 +20,14 @@ export default class LearnPaneHandler extends Hideable {
         this.checkInput();
       }
     });
+    // Enter key support.
+    this.checkButton.addEventListener("keyup", (ev) => {
+      if (this.currentPhrase && ev.keyCode === 13) {
+        this.checkInput();
+        ev.preventDefault();
+      }
+    });
+
     this.nextButton = document.querySelector("#next-btn");
     this.nextButton.addEventListener("click", () => {
       this.processOnePhrase();
