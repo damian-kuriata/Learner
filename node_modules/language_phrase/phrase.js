@@ -43,7 +43,7 @@ export default  class Phrase {
       throw new Error("Wrong direction");
     }
     let tmp = this;
-    // Replace german letters
+    // Replace german and polish letters
     tmp.translatedText = tmp.translatedText.toLowerCase().trim();
     tmp.translatedText = replaceCharacters(tmp.translatedText);
 
@@ -51,9 +51,11 @@ export default  class Phrase {
     tmp.originalText = replaceCharacters(tmp.originalText);
 
     if (direction === "to") {
-      return translation === tmp.originalText;
+      return haveMutualSections(translation, tmp.originalText);
+    //  return translation === tmp.originalText;
     } else {
-      return translation === tmp.translatedText;
+      return haveMutualSections(translation, tmp.translatedText);
+    //  return translation === tmp.translatedText;
     }
   }
 
@@ -128,4 +130,20 @@ export default  class Phrase {
     // Refresh local storage
     localStorage.setItem(Phrase.localStorageTag, JSON.stringify(phrases));
   }
+}
+
+function haveMutualSections (first, second, separator=",") {
+  let splitFirst = first.split(separator);
+  let splitSecond = second.split(separator);
+
+  // Strip (trim) white characters for each section.
+  splitFirst = splitFirst.map(chunk => chunk.trim());
+  splitSecond = splitSecond.map(chunk => chunk.trim());
+
+  let matchesAll = true;
+  for (let chunk of splitFirst) {
+    matchesAll = splitSecond.includes(chunk);
+  }
+
+  return matchesAll;
 }

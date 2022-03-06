@@ -33,7 +33,7 @@ export default class LearnPaneHandler extends Hideable {
     this.translationDirection = Math.floor(Math.random() * (1 - 0 + 1)) + 0;
     this.translationDirection = this.translationDirection === 0? "to":"from";
     // Obtain next phrase random.
-    this.currentPhrase = Phrase.loadFromStorage(false);
+    this.currentPhrase = Phrase.loadFromStorage(false)
     // Array instance is returned in case of empty data.
     if (this.currentPhrase instanceof Array) {
       this.translatedPhrase.textContent = "At first add phrases!";
