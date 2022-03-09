@@ -111,15 +111,34 @@ export default class ManagePaneHandler extends Hideable {
     this.phrasesFileForm = document.querySelector("#file-form");
     this.phrasesFileForm.addEventListener("submit", async (ev) => {
       ev.preventDefault();
-      const file =
-        document.querySelector("#phrases-file").files[0];
+      let loadedPhrases;
+      try {
+        const file =
+          document.querySelector("#phrases-file").files[0];
 
-      const loadedPhrases = await loadPhrasesFromFile(file);
+        loadedPhrases = await loadPhrasesFromFile(file);
+      } catch (error) {
+        alert("Problem has been encountered: ", error);
+      }
       // Save to storage.
       for (const phrase of loadedPhrases) {
         Phrase.saveToStorage(phrase);
       }
       this.phraseList.refresh(Phrase.loadFromStorage());
+    });
+
+    this.downloadButton = document.querySelector("#download-button");
+    this.downloadButton.addEventListener("click", () => {
+      convertToTxtFormat(Phrase.loadFromStorage()).then((txt) => {
+        const href =
+          "data:text/plain;charset=utf-8," + encodeURIComponent(txt);
+        let downloadLink = document.createElement("a");
+        downloadLink.setAttribute("href", href);
+        downloadLink.setAttribute("download", "downloaded-phrases.txt");
+        downloadLink.click();
+      }).catch((err) => {
+        alert("Unexpected error: ", err);
+      });
     });
   }
 
@@ -243,4 +262,20 @@ async function loadPhrasesFromFile (fileInstance) {
     phrases.push(newPhrase);
   }
   return phrases;
+}
+
+function convertToTxtFormat (phrases) {
+  const separator = ":";
+  return new Promise((success, reject) => {
+    try {
+      let result = "";
+      for (let phrase of phrases) {
+        const line = phrase.originalText + separator + phrase.translatedText;
+        result += line + "\n";
+      }
+      success(result);
+    } catch (err) {
+      reject(err);
+    }
+  });
 }

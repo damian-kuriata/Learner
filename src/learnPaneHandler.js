@@ -8,6 +8,7 @@ export default class LearnPaneHandler extends Hideable {
     // property named "container" to work.
     this.container = learnPane;
     this.currentPhrase = null;
+    this.phrasesToOmit = [];
     this.translationDirection;
     this.translatedPhrase = document.querySelector("#translated-phrase");
     this.learnPhraseInput = document.querySelector("#learn-phrase-input");
@@ -32,6 +33,20 @@ export default class LearnPaneHandler extends Hideable {
     this.nextButton.addEventListener("click", () => {
       this.processOnePhrase();
     });
+
+    this.omitButton = document.querySelector("#omit-btn");
+    this.omitButton.addEventListener("click", () => {
+      if (!this.currentPhrase) {
+        return;
+      }
+      const allAvailable = Phrase.loadFromStorage();
+      if (this.phrasesToOmit.length >= allAvailable.length - 1) {
+        alert("You cannot omit the only phrase!");
+      } else {
+        this.phrasesToOmit.push(this.currentPhrase);
+        this.processOnePhrase();
+      }
+    });
   }
 
   /* This method obtains phrase from storage and updates relevant fields. */
@@ -41,12 +56,20 @@ export default class LearnPaneHandler extends Hideable {
     this.translationDirection = Math.floor(Math.random() * (1 - 0 + 1)) + 0;
     this.translationDirection = this.translationDirection === 0? "to":"from";
     // Obtain next phrase random.
-    this.currentPhrase = Phrase.loadFromStorage(false)
+    this.currentPhrase = Phrase.loadFromStorage(false);
+    const allAvailable = Phrase.loadFromStorage();
     // Array instance is returned in case of empty data.
     if (this.currentPhrase instanceof Array) {
       this.translatedPhrase.textContent = "At first add phrases!";
       this.currentPhrase = null;
       return;
+    }
+
+    // Check if this phrase should be omitted. If so, call self again.
+    const toOmit =
+      this.phrasesToOmit.findIndex(ph => ph.id === this.currentPhrase.id) !== -1;
+    if (toOmit) {
+      this.processOnePhrase();
     }
     if (this.translationDirection === "to") {
       this.translatedPhrase.textContent =
