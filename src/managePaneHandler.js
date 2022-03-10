@@ -111,20 +111,21 @@ export default class ManagePaneHandler extends Hideable {
     this.phrasesFileForm = document.querySelector("#file-form");
     this.phrasesFileForm.addEventListener("submit", async (ev) => {
       ev.preventDefault();
-      let loadedPhrases;
+      let loadedPhrases = [];
       try {
         const file =
           document.querySelector("#phrases-file").files[0];
 
         loadedPhrases = await loadPhrasesFromFile(file);
+        // Save to storage.
+        for (const phrase of loadedPhrases) {
+          Phrase.saveToStorage(phrase);
+        }
+        this.phraseList.refresh(Phrase.loadFromStorage());
       } catch (error) {
         alert("Problem has been encountered: ", error);
+        console.log(error);
       }
-      // Save to storage.
-      for (const phrase of loadedPhrases) {
-        Phrase.saveToStorage(phrase);
-      }
-      this.phraseList.refresh(Phrase.loadFromStorage());
     });
 
     this.downloadButton = document.querySelector("#download-button");
@@ -251,9 +252,13 @@ async function loadPhrasesFromFile (fileInstance) {
   let phrases = [];
   let textContents = await fileInstance.text();
   // For some reason, text sometimes contains '/r' character. Remove it.
-  textContents.replaceAll("/r","");
+  textContents.replaceAll("\r","");
   // For each line.
   for (let line of textContents.split("\n")) {
+    if (!line.includes(separator)) {
+      // When line is incorrect, go to next one.
+      continue;
+    }
     let [beforeSep, afterSep] = line.split(separator);
     let originalText = beforeSep.trim();
     let translatedText = afterSep.trim();
@@ -264,8 +269,7 @@ async function loadPhrasesFromFile (fileInstance) {
   return phrases;
 }
 
-function convertToTxtFormat (phrases) {
-  const separator = ":";
+function convertToTxtFormat (phrases, separator=":") {
   return new Promise((success, reject) => {
     try {
       let result = "";
