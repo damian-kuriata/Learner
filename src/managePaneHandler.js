@@ -123,7 +123,7 @@ export default class ManagePaneHandler extends Hideable {
         }
         this.phraseList.refresh(Phrase.loadFromStorage());
       } catch (error) {
-        alert("Problem has been encountered: ", error);
+        alert("Problem has been encountered: ", error.toString());
         console.log(error);
       }
     });
