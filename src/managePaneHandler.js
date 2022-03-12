@@ -100,46 +100,56 @@ export default class ManagePaneHandler extends Hideable {
 
     this.clearAllButton = document.querySelector("#clear-all-button");
     this.clearAllButton.addEventListener("click", () => {
-      // Delete all phrases.
-      const all = Phrase.loadFromStorage(true);
-      for (let one of all) {
-        Phrase.removeFromStorage(one.id);
-      }
-      this.phraseList.refresh([]);
+      this.clearAllPhrases();
     });
 
     this.phrasesFileForm = document.querySelector("#file-form");
     this.phrasesFileForm.addEventListener("submit", async (ev) => {
       ev.preventDefault();
-      let loadedPhrases = [];
-      try {
-        const file =
-          document.querySelector("#phrases-file").files[0];
-
-        loadedPhrases = await loadPhrasesFromFile(file);
-        // Save to storage.
-        for (const phrase of loadedPhrases) {
-          Phrase.saveToStorage(phrase);
-        }
-        this.phraseList.refresh(Phrase.loadFromStorage());
-      } catch (error) {
-        alert("Problem has been encountered: ", error.toString());
-        console.log(error);
-      }
+      const file = document.querySelector("#phrases-file").files[0];
+      await this.uploadFromFile(file);
     });
 
     this.downloadButton = document.querySelector("#download-button");
     this.downloadButton.addEventListener("click", () => {
-      convertToTxtFormat(Phrase.loadFromStorage()).then((txt) => {
-        const href =
+      this.exportToFile();
+    });
+  }
+
+  clearAllPhrases () {
+    // Delete all phrases.
+    const all = Phrase.loadFromStorage(true);
+    for (let one of all) {
+      Phrase.removeFromStorage(one.id);
+    }
+    this.phraseList.refresh([]);
+  }
+
+  async uploadFromFile (file) {
+    let loadedPhrases = [];
+    try {
+      loadedPhrases = await loadPhrasesFromFile(file);
+      // Save to storage.
+      for (const phrase of loadedPhrases) {
+        Phrase.saveToStorage(phrase);
+      }
+      this.phraseList.refresh(Phrase.loadFromStorage());
+    } catch (error) {
+      alert("Problem has been encountered: ", error.toString());
+      console.log(error);
+    }
+  }
+
+  exportToFile () {
+    convertToTxtFormat(Phrase.loadFromStorage()).then((txt) => {
+      const href =
           "data:text/plain;charset=utf-8," + encodeURIComponent(txt);
-        let downloadLink = document.createElement("a");
-        downloadLink.setAttribute("href", href);
-        downloadLink.setAttribute("download", "downloaded-phrases.txt");
-        downloadLink.click();
-      }).catch((err) => {
-        alert("Unexpected error: ", err);
-      });
+      let downloadLink = document.createElement("a");
+      downloadLink.setAttribute("href", href);
+      downloadLink.setAttribute("download", "downloaded-phrases.txt");
+      downloadLink.click();
+    }).catch((err) => {
+      alert("Unexpected error: ", err.toString());
     });
   }
 
@@ -171,8 +181,6 @@ export default class ManagePaneHandler extends Hideable {
   }
 
   onConfirm () {
-    console.log(this.newOriginalText);
-    console.log(this.newOriginalText, this.newTranslatedText);
     let toSave;
     if (this.phraseEdited) {
       toSave = new Phrase(this.newOriginalText, this.newTranslatedText,
@@ -180,7 +188,6 @@ export default class ManagePaneHandler extends Hideable {
     } else {
       toSave = new Phrase(this.newOriginalText, this.newTranslatedText);
     }
-    console.log("To save: ", toSave);
     Phrase.saveToStorage(toSave);
     const  phrases = Phrase.loadFromStorage();
     this.phraseList.refresh(phrases);
@@ -188,7 +195,6 @@ export default class ManagePaneHandler extends Hideable {
     this.phraseInputDialog.setOriginalTextValue("");
     this.newOriginalText = "";
     this.newTranslatedText = "";
-    //this.#onInputComplete();
   }
 
   onClose () {
@@ -223,29 +229,25 @@ export default class ManagePaneHandler extends Hideable {
 
 function filterPhrases (phrases, searchTerm, caseSensitive=false) {
   // Get all phrases beginning with searchTerm.
-  if (phrases instanceof Array === false) {
+  if (!(phrases instanceof Array)) {
     throw new Error("Array instance must be passed");
   }
-  const res =  phrases.filter((phrase) => {
+
+  return phrases.filter((phrase) => {
     // Convert to lower case when needed.
     if (caseSensitive) {
       phrase.originalText = phrase.originalText.toLowerCase();
       phrase.translatedText = phrase.translatedText.toLowerCase();
     }
-    if (phrase.originalText.startsWith(searchTerm) ||
-        phrase.translatedText.startsWith(searchTerm)) {
-          return true;
-        }
-        return false;
+    return phrase.originalText.startsWith(searchTerm) ||
+        phrase.translatedText.startsWith(searchTerm);
   });
-
-  return res;
 }
 
 async function loadPhrasesFromFile (fileInstance) {
   const separator = ":";
 
-  if (fileInstance instanceof File === false) {
+  if (!(fileInstance instanceof File)) {
     throw new Error("File instance must be provided");
   }
 
