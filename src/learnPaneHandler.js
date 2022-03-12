@@ -9,12 +9,16 @@ export default class LearnPaneHandler extends Hideable {
     this.container = learnPane;
     this.currentPhrase = null;
     this.phrasesToOmit = [];
-    this.translationDirection;
+    this.phraseScores = {};
+    this.maxPhraseScores = 5;
+    this.translationDirection = null;
     this.translatedPhrase = document.querySelector("#translated-phrase");
     this.learnPhraseInput = document.querySelector("#learn-phrase-input");
     this.resultText = document.querySelector("#result-text");
     this.checkButton =
       document.querySelector("#check-btn");
+    this.scoreCounter = document.querySelector("#score-counter");
+    this.scoreCounter.textContent = "0";
 
     this.checkButton.addEventListener("click", () => {
       if (this.currentPhrase) {
@@ -66,11 +70,16 @@ export default class LearnPaneHandler extends Hideable {
     }
 
     // Check if this phrase should be omitted. If so, call self again.
+    console.log(this.currentPhrase);
     const toOmit =
       this.phrasesToOmit.findIndex(ph => ph.id === this.currentPhrase.id) !== -1;
     if (toOmit) {
       this.processOnePhrase();
     }
+    if (!this.phraseScores[this.currentPhrase.id]) {
+      this.phraseScores[this.currentPhrase.id] = 0;
+    }
+    this.scoreCounter.textContent = this.phraseScores[this.currentPhrase.id];
     if (this.translationDirection === "to") {
       this.translatedPhrase.textContent =
         this.currentPhrase.translatedText;
@@ -93,6 +102,12 @@ export default class LearnPaneHandler extends Hideable {
   }
 
   #onCorrectInput () {
+    // Create new field if necessary
+
+    this.phraseScores[this.currentPhrase.id]++;
+    if (this.phraseScores[this.currentPhrase.id] === this.maxPhraseScores) {
+      this.phrasesToOmit.push(this.currentPhrase);
+    }
     this.processOnePhrase();
   }
 
