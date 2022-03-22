@@ -1,3 +1,4 @@
 module.exports = {
-	entry: "./tests.js"
+	entry: "./tests.js",
+	mode: "development"
 };

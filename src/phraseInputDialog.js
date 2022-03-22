@@ -4,10 +4,11 @@ export default class PhraseInputDialog extends Hideable {
   #handlers;
   #inEdit;
 
-  constructor (handlers, originalText="", translatedText="") {
+  constructor (handlers, originalText="", translatedText="", group=-1) {
     super();
     this.originalText = originalText;
     this.translatedText = translatedText;
+    this.group = group;
     this.#handlers = handlers;
     this.#inEdit = false;
 
@@ -20,11 +21,13 @@ export default class PhraseInputDialog extends Hideable {
     this.container = document.querySelector("#phrase-input-dialog");
     this.originalTextInput = document.querySelector("#original-text-input");
     this.translatedTextInput = document.querySelector("#translated-text-input");
+    this.groupInput = document.querySelector("#group-input");
     this.confirmButton = document.querySelector(".dialog-confirm-btn");
     this.cancelButton = document.querySelector(".dialog-cancel-btn");
     this.closeButton = document.querySelector(".dialog-close-btn");
     this.originalTextInput.value = originalText;
     this.translatedTextInput.value = translatedText;
+    this.groupInput.value = group;
 
     for (let handlerName in handlers) {
       if (!this[handlerName]) continue;
@@ -51,6 +54,14 @@ export default class PhraseInputDialog extends Hideable {
     }
     this.translatedText = value;
     this.translatedTextInput.value = value
+  }
+
+  setGroupValue (value) {
+    if (!this.groupInput) {
+      throw new Error("No group input present");
+    }
+    this.group = value;
+    this.groupInput.value = value;
   }
 
   destroy () {

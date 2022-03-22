@@ -63,6 +63,7 @@ export default class ManagePaneHandler extends Hideable {
     super();
     this.newOriginalText = "";
     this.newTranslatedText = "";
+    this.newGroup = "test";
     this.phraseEdited = null;
     this.searchTerm = "";
 
@@ -71,6 +72,7 @@ export default class ManagePaneHandler extends Hideable {
      // Range, so at first we have to set it to as fixed value.
     this.onNewOriginalTextChange = this.onNewOriginalTextChange.bind(this);
     this.onNewTranslatedTextChange = this.onNewTranslatedTextChange.bind(this);
+    this.onGroupChange = this.onGroupChange.bind(this);
     this.onPhraseEdit = this.onPhraseEdit.bind(this);
     this.onPhraseDelete = this.onPhraseDelete.bind(this);
     this.onConfirm = this.onConfirm.bind(this);
@@ -79,6 +81,7 @@ export default class ManagePaneHandler extends Hideable {
     const handlers = {
       "originalTextInput": this.onNewOriginalTextChange,
       "translatedTextInput": this.onNewTranslatedTextChange,
+      "groupInput": this.onGroupChange,
       "closeButton": this.onClose,
       "confirmButton": this.onConfirm,
       // Same as close.
@@ -107,6 +110,16 @@ export default class ManagePaneHandler extends Hideable {
     this.phrasesFileForm.addEventListener("submit", async (ev) => {
       ev.preventDefault();
       const file = document.querySelector("#phrases-file").files[0];
+      // File has not been selected? Pick the last selected file.
+      if (!file) {
+        const lastFilename = JSON.parse(localStorage.getItem(ManagePaneHandler.localStorageTag))["lastFilename"];
+        if (!lastFilename) {
+          alert("Select file to open!");
+          return;
+        } else {
+          alert("Last file opened: ", last)
+        }
+      }
       await this.uploadFromFile(file);
     });
 
@@ -165,9 +178,11 @@ export default class ManagePaneHandler extends Hideable {
     console.log("Phrae in edit: ", phrase);
     this.newOriginalText = phrase.originalText;
     this.newTranslatedText = phrase.translatedText;
+    this.newGroup = phrase.group;
     this.phraseInputDialog.show();
     this.phraseInputDialog.setOriginalTextValue(phrase.originalText);
     this.phraseInputDialog.setTranslatedTextValue(phrase.translatedText);
+    this.phraseInputDialog.setGroupValue(phrase.group);
   }
 
   onNewOriginalTextChange (e) {
@@ -180,21 +195,32 @@ export default class ManagePaneHandler extends Hideable {
     this.newTranslatedText = e.target.value;
   }
 
+  onGroupChange (e) {
+    this.newGroup = e.target.value;
+    console.log("Group change: ", this);
+  }
+
   onConfirm () {
+    console.log("Confirm, this: ", this);
+    console.log("Confirm, gtoup: ", this.newGroup);
     let toSave;
     if (this.phraseEdited) {
       toSave = new Phrase(this.newOriginalText, this.newTranslatedText,
         this.phraseEdited.id);
     } else {
-      toSave = new Phrase(this.newOriginalText, this.newTranslatedText);
+      toSave = new Phrase(this.newOriginalText, this.newTranslatedText, null);
     }
     Phrase.saveToStorage(toSave);
-    const  phrases = Phrase.loadFromStorage();
+    console.log("Save: ", toSave);
+    const phrases = Phrase.loadFromStorage();
+    console.log("Phrases: ", phrases);
     this.phraseList.refresh(phrases);
     this.phraseInputDialog.setTranslatedTextValue("");
     this.phraseInputDialog.setOriginalTextValue("");
+    this.phraseInputDialog.setGroupValue(-1);
     this.newOriginalText = "";
     this.newTranslatedText = "";
+    this.newGroup = "";
   }
 
   onClose () {
@@ -206,8 +232,10 @@ export default class ManagePaneHandler extends Hideable {
     // Important, clear internal input data.
     this.phraseInputDialog.setTranslatedTextValue("");
     this.phraseInputDialog.setOriginalTextValue("");
+    this.phraseInputDialog.setGroupValue(-1);
     this.newOriginalText = "";
     this.newTranslatedText = "";
+    this.newGroup = -1;
     this.newButton.disabled = false;
     this.phraseEdited = null;
   }

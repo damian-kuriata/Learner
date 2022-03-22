@@ -10,7 +10,7 @@ export default class LearnPaneHandler extends Hideable {
     this.currentPhrase = null;
     this.phrasesToOmit = [];
     this.phraseScores = {};
-    this.maxPhraseScores = 5;
+    this.maxPhraseScores = 4;
     this.translationDirection = null;
     this.translatedPhrase = document.querySelector("#translated-phrase");
     this.learnPhraseInput = document.querySelector("#learn-phrase-input");
@@ -19,6 +19,16 @@ export default class LearnPaneHandler extends Hideable {
       document.querySelector("#check-btn");
     this.scoreCounter = document.querySelector("#score-counter");
     this.scoreCounter.textContent = "0";
+    this.selectedGroup = -1;
+    this.groupSelect = document.querySelector("#group-select");
+    this.groupSelect.addEventListener("input", (ev) => {
+      const val = ev.target.value.trim();
+      // If "-1" occurs, it needs to be converted to number because default group is -1.
+      this.selectedGroup = val === "-1"? Number.parseInt(val) : val;
+
+      // New phrase with selected group;
+      this.processOnePhrase();
+    });
 
     this.checkButton.addEventListener("click", () => {
       if (this.currentPhrase) {
@@ -60,7 +70,10 @@ export default class LearnPaneHandler extends Hideable {
     this.translationDirection = Math.floor(Math.random() * (1 - 0 + 1)) + 0;
     this.translationDirection = this.translationDirection === 0? "to":"from";
     // Obtain next phrase random.
-    this.currentPhrase = Phrase.loadFromStorage(false);
+
+    this.currentPhrase = Phrase.loadFromStorage(false, null, this.selectedGroup);
+    console.log("Current: ", this.currentPhrase);
+    // Phrase not found?
     const allAvailable = Phrase.loadFromStorage();
     // Array instance is returned in case of empty data.
     if (this.currentPhrase instanceof Array) {
@@ -68,7 +81,11 @@ export default class LearnPaneHandler extends Hideable {
       this.currentPhrase = null;
       return;
     }
-
+    else if (this.currentPhrase === undefined) {
+      this.translatedPhrase.textContent = "This group is empty";
+      this.currentPhrase = null;
+      return;
+    }
     // Check if this phrase should be omitted. If so, call self again.
     console.log(this.currentPhrase);
     const toOmit =
@@ -76,6 +93,7 @@ export default class LearnPaneHandler extends Hideable {
     if (toOmit) {
       this.processOnePhrase();
     }
+
     if (!this.phraseScores[this.currentPhrase.id]) {
       this.phraseScores[this.currentPhrase.id] = 0;
     }

@@ -26,6 +26,7 @@
         <div id="learn-pane" class="pane learn-pane">
           <p id="translate-header" class="font-size-big">Translate</p>
           <p id="score-counter"><!-- Will be filled in JavaScript--></p>
+          <input type="text" id="group-select" name="group-select" value="-1"/>
           <div id="translated-phrase">
             <!-- Content will be generated in JavaScript -->
           </div>
@@ -88,6 +89,12 @@
               Translated text:
             </label>
             <input id="translated-text-input" type="text" />
+          </div>
+          <div class="input-vertical-container">
+            <label for="group-input">
+              Group:
+            </label>
+            <input id="group-input" type="text" />
           </div>
           <div class="dialog-bottom-btns">
             <button class="dialog-cancel-btn">Cancel</button>
